@@ -1,0 +1,78 @@
+from flask import Flask
+import requests
+import json
+from mysql.connector import connect, Error
+import logging
+import sys
+import os
+
+#Creating and Configuring Logger
+
+Log_Format = "%(levelname)s %(asctime)s - %(message)s"
+
+logging.basicConfig(stream = sys.stdout,
+                    format = Log_Format, 
+                    level = logging.DEBUG)
+logger = logging.getLogger()
+
+
+def log(record):
+    logger.debug(record)
+
+def get_weather(use_db=True):
+
+
+    api_key = os.environ['WEATHER_API_KEY']
+    api = f'https://api.openweathermap.org/data/2.5/weather?units=metric&lat=55.7609&lon=37.6703&appid={api_key}'
+    #api = f'https://api.openweathermap.org/data/2.5/forecast?units=metric&lat=55.7609&lon=37.6703&appid={api_key}'
+
+    db_host = 'database'
+    db_port = 3306
+    db_user = os.environ['MYSQL_USER']
+    db_pass = os.environ['MYSQL_PASS']
+    db_db = os.environ['MYSQL_DATABASE']
+
+    
+    try:
+        r = requests.get(api).json()
+        result = json.dumps(r)
+        log(r)
+        
+        if use_db:
+            conn = connect(host=db_host,user=db_user,password=db_pass)
+            cursor = conn.cursor()
+            query = f'INSERT INTO {db_db}.weather (`data`) VALUES (\'{result}\');'
+            cursor.execute(query)
+            conn.commit()
+        
+        return result
+
+    except Exception as e:
+        log(f'Something went wrong "{e}"')
+        if result:
+            return result
+
+
+app=Flask(__name__)
+
+
+@app.route('/')
+def func():
+       return 'The root'
+
+
+@app.route('/greet<name>')
+def greet(name):
+    return f"Hello, {name}"
+
+
+@app.route('/weather')
+def weather():
+    w = get_weather()
+    return f"{w}"
+
+
+if __name__=='__main__':
+       app.debug=True
+       app.run(host='0.0.0.0')
+
