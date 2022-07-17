@@ -3,8 +3,10 @@ import main
 import os
 import json
 from dotenv import load_dotenv
+from time import sleep
 
 load_dotenv()
+sleep(int(os.environ['BOOT_DELAY']))
 
 class TestApi(unittest.TestCase):
     def test_api_function(self):
@@ -21,6 +23,7 @@ class TestApi(unittest.TestCase):
         self.assertIn('coord', test_response, '\nNo "coord" section in API response')
         self.assertIn('main', test_response, '\nNo "main" section in API response')
         self.assertIn('wind', test_response, '\nNo "wind" section in API response')
+        #self.assertIn('cod', test_response, '\nNo "cod" section in API response')
         self.assertIn('dt', test_response, '\nNo "dt" section in API response')
 
 

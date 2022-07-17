@@ -5,6 +5,7 @@ from mysql.connector import connect, Error
 import logging
 import sys
 import os
+from time import sleep
 
 #Creating and Configuring Logger
 
@@ -57,9 +58,12 @@ app=Flask(__name__)
 
 
 @app.route('/')
-def func():
-       return 'The root'
+def root():
+    return 'The root'
 
+@app.route('/test')
+def test():
+    return 'The test\n'
 
 @app.route('/greet<name>')
 def greet(name):
@@ -72,7 +76,8 @@ def weather():
     return f"{w}"
 
 
-if __name__=='__main__':
-       app.debug=True
-       app.run(host='0.0.0.0')
+if __name__=='__main__':   
+    sleep(int(os.environ['BOOT_DELAY']))
+    app.debug=True
+    app.run(host='0.0.0.0')
 
