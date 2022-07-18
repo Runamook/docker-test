@@ -3,3 +3,9 @@ requests
 mysql-connector-python
 python-dotenv
 gunicorn
+
+flake8-bugbear
+flake8-builtins
+flake8-variables-names
+flake8-import-order
+pep8-naming
