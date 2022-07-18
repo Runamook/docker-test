@@ -1,12 +1,20 @@
-import unittest
-import main
-import os
 import json
-from dotenv import load_dotenv
+import os
+import unittest
 from time import sleep
 
+from dotenv import load_dotenv
+
+import main
+
+
 load_dotenv()
-sleep(int(os.environ['BOOT_DELAY']))
+
+if os.environ.get('BOOT_DELAY'):
+    sleep(int(os.environ['BOOT_DELAY']))
+else:
+    sleep(10)
+
 
 class TestApi(unittest.TestCase):
     def test_api_function(self):
@@ -18,14 +26,13 @@ class TestApi(unittest.TestCase):
 
         response = main.get_weather(use_db=True)
         test_response = json.loads(response)
-        
+
         self.assertIsInstance(test_response, dict, '\nAPI response is not a dict')
         self.assertIn('coord', test_response, '\nNo "coord" section in API response')
         self.assertIn('main', test_response, '\nNo "main" section in API response')
         self.assertIn('wind', test_response, '\nNo "wind" section in API response')
-        #self.assertIn('cod', test_response, '\nNo "cod" section in API response')
+        # self.assertIn('cod', test_response, '\nNo "cod" section in API response')
         self.assertIn('dt', test_response, '\nNo "dt" section in API response')
-
 
 
 if __name__ == '__main__':

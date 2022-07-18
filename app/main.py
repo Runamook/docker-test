@@ -78,6 +78,11 @@ def weather():
 
 
 if __name__ == '__main__':
-    sleep(int(os.environ['BOOT_DELAY']))
+
+    if os.environ.get('BOOT_DELAY'):
+        sleep(int(os.environ['BOOT_DELAY']))
+    else:
+        sleep(10)
+
     app.debug = True
     app.run(host='0.0.0.0')
