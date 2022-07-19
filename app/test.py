@@ -22,11 +22,15 @@ class TestApi(unittest.TestCase):
         if not os.environ.get('WEATHER_API_KEY'):
             os.environ['WEATHER_API_KEY'] = os.getenv('WEATHER_API_KEY') or 'Test'
 
-        os.environ['MYSQL_PASS'] = os.getenv('MYSQL_PASS')
+        os.environ['MYSQL_PASS'] = os.getenv('MYSQL_PASS') or 'None'
         os.environ['MYSQL_DATABASE'] = 'weather'
         os.environ['MYSQL_USER'] = 'weather'
 
-        response = main.get_weather(use_db=True)
+        if os.environ['MYSQL_PASS'] == 'None':
+            usedb = False
+        else:
+            usedb = True
+        response = main.get_weather(use_db=usedb)
         test_response = json.loads(response)
 
         self.assertIsInstance(test_response, dict, '\nAPI response is not a dict')
