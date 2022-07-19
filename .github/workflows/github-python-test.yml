@@ -1,7 +1,7 @@
 name: Python code test
 on: [push]
 jobs:
-  test:
+  test_code:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -16,7 +16,8 @@ jobs:
         pip install -r requirements.txt
     - name: Run Flake8
       run: flake8 .
-    - name: Run Tests
+    - name: Run Code tests
       run: |
+        cd app
         export WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}
         python -m unittest test.py
