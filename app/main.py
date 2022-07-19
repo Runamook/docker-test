@@ -2,12 +2,14 @@ import json
 import logging
 import os
 import sys
+from time import sleep
+
+from flask import Flask
+
+from mysql.connector import connect
 
 import requests
 
-from flask import Flask
-from mysql.connector import connect
-from time import sleep
 
 # Creating and Configuring Logger
 
@@ -34,9 +36,9 @@ def get_weather(use_db=True):
     db_db = os.environ['MYSQL_DATABASE']
 
     try:
-        r = requests.get(api).json()
-        result = json.dumps(r)
-        log(r)
+        raw_resp = requests.get(api).json()
+        result = json.dumps(raw_resp)
+        log(raw_resp)
 
         if use_db:
             conn = connect(host=db_host, user=db_user, password=db_pass)

@@ -19,7 +19,9 @@ else:
 class TestApi(unittest.TestCase):
     def test_api_function(self):
 
-        os.environ['WEATHER_API_KEY'] = os.getenv('WEATHER_API_KEY')
+        if not os.environ.get('WEATHER_API_KEY'):
+            os.environ['WEATHER_API_KEY'] = os.getenv('WEATHER_API_KEY') or 'Test'
+
         os.environ['MYSQL_PASS'] = os.getenv('MYSQL_PASS')
         os.environ['MYSQL_DATABASE'] = 'weather'
         os.environ['MYSQL_USER'] = 'weather'
