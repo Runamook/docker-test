@@ -1,4 +1,4 @@
-name: Python code test
+name: Python-code-test
 on: [push]
 jobs:
   test_code:
